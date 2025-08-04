@@ -1,0 +1,31 @@
+name: Testes de Qualidade
+
+on: [ push, pull_request ]
+
+jobs:
+  quality:
+    name: Testes de qualidade
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurando PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          coverage: xdebug
+
+      - name: Instalando dependências do Composer
+        uses: ramsey/composer-install@v3
+
+      - name: Checando PHPCS
+        run: composer run phpcs
+
+      - name: Checando PHPMD
+        run: composer run phpmd
+
+      - name: Checando PHPStan
+        run: composer run phpstan
+
